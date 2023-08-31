@@ -1,3 +1,5 @@
+<!-- eslint-disable vue/multi-word-component-names -->
+
 <template>
     <div>
         <h1>TELA DE LOGIN</h1>
@@ -9,5 +11,7 @@ export default {
 }
 </script>
 <style>
-    
+    *{
+        margin: 0;
+    }
 </style>
