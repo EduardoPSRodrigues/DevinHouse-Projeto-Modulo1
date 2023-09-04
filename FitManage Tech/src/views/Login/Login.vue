@@ -63,8 +63,8 @@ export default {
                     }
                 })
                     .then((response) => {
-                        localStorage.setItem("usuario_name", response.data.name)
-                        localStorage.setItem("usuario_token", response.data.token)
+                        localStorage.setItem("user_name", response.data.name)
+                        localStorage.setItem("user_token", response.data.token)
 
                         alert('Login efetuado com sucesso')
                         this.$router.push('/dashboard')
