@@ -14,7 +14,7 @@
                             {{ responseDashboard.amount_students }} Aluno(s)
                         </v-card-text>
                         <v-card-actions>
-                            <v-btn color="primary">Adicionar</v-btn>
+                            <v-btn color="primary" :to="{name: 'GerenciamentoAlunos'}">Adicionar</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-col>
@@ -25,7 +25,7 @@
                             {{ responseDashboard.amount_exercises }} Exercício(s)
                         </v-card-text>
                         <v-card-actions>
-                            <v-btn color="primary">Adicionar</v-btn>
+                            <v-btn color="primary" :to="{ name: 'GerenciamentoExercicio' }">Adicionar</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-col>
