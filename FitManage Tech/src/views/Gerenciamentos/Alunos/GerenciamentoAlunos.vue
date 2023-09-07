@@ -32,7 +32,7 @@
         <tr v-for="responseStudent in filteredStudents" :key="responseStudent.id">
           <td>{{ responseStudent.name }}</td>
           <td>
-            <v-btn @click="() => createExercise(responseStudent.id)">Mostrar Treino</v-btn>
+            <v-btn @click="() => createExercise(responseStudent.id)">Montar Treino</v-btn>
             <v-btn @click="() => showExercise(responseStudent.id)">Ver</v-btn>
           </td>
         </tr>
@@ -108,6 +108,11 @@ export default {
 
             this.errorInputExercises = ''
 
+        },
+        createExercise(id){
+                localStorage.setItem("student_id", id)
+
+                this.$router.push('/cadastro/treino')
         },
     }
 }
