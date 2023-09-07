@@ -8,33 +8,32 @@
 
     <v-form ref="form" @submit.prevent="handleFilterStudents">
         <v-text-field label="Nome" variant="outlined"
-            v-model="student" placeholder="Digite o nome do aluno" required></v-text-field>
+            v-model="studentSearch" placeholder="Digite o nome do aluno" required></v-text-field>
 
         <v-btn variant="tonal" color="green" type="submit">Buscar</v-btn>
     </v-form>
 
     <h2>Lista de Alunos</h2>
-    <ul>
+    <!-- <ul>
       <li v-for="exercise in responseStudents" :key="exercise.id">
-        {{ exercise.description }}
+       
       </li>
-    </ul>
+    </ul> -->
 
 
     <v-table>
       <thead>
         <tr>
-          <th class="text-left">Nome</th>
-          <th>Ações</th>
+          <th class="text-center">Nome</th>
+          <th class="text-center">Ações</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="post in posts" :key="post.id">
-          <td>{{ post.title }}</td>
-          <td>{{ post.description }}</td>
+        <tr v-for="responseStudent in filteredStudents" :key="responseStudent.id">
+          <td>{{ responseStudent.name }}</td>
           <td>
-            <v-btn @click="() => createExercise(post.id)">Mostrar Treino</v-btn>
-            <v-btn @click="() => showExercise(post.id)">Ver</v-btn>
+            <v-btn @click="() => createExercise(responseStudent.id)">Mostrar Treino</v-btn>
+            <v-btn @click="() => showExercise(responseStudent.id)">Ver</v-btn>
           </td>
         </tr>
       </tbody>
@@ -66,20 +65,27 @@ import axios from 'axios'
 export default {
     data() {
         return {
-            student: '',
+            studentSearch: '',
             errorInputExercises: '',
 
-            responseStudents: {},
+            responseStudents: [],
 
             snackbar: false,
             timeout: 2000,
-
-            posts: [],
         }
     },
     mounted() {
         this.loadStudents()
     },
+    computed: {
+    filteredStudents() {
+      // Filtrar os alunos com base no valor de studentSearch
+      const searchTerm = this.studentSearch.trim().toLowerCase()
+      return this.responseStudents.filter(student => {
+        return student.name.toLowerCase().includes(searchTerm)
+      })
+    },
+  },
     methods: {
         loadStudents() {
             const token = localStorage.getItem('user_token')
@@ -92,7 +98,7 @@ export default {
                 }
             })
                 .then((response) => {
-                    this.responseStudents = response.data
+                    this.responseStudents = response.data.students
                 })
                 .catch(() => {
                     alert('Houve uma falha ao carregar as informações.')
