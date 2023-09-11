@@ -10,12 +10,11 @@
             <v-select 
                 v-model="selectedExerciseId" 
                 :items="responseExercises" 
+                item-title="description"
                 item-value="id"
                 label="Qual o exercício"
                 >
-        </v-select>
-
-        
+        </v-select>      
 
         <span class="message-error">{{ this.errors.selectedExerciseId }}</span>
         </div>
@@ -144,7 +143,7 @@ export default {
                 }
             })
                 .then((response) => {
-                    this.responseExercises = response.data.map((item) => item.description);   
+                    this.responseExercises = response.data
 
         })
                 .catch(() => {
