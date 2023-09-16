@@ -24,3 +24,5 @@ CSS (Cascading Style Sheets): O CSS é usado para estilizar e formatar elementos
 Para aproveitar todas as funcionalidades e recursos oferecidos pelo sistema FitGymPro, é necessário realizar um cadastro. O cadastro é fundamental para criar e gerenciar sua conta de usuário, personalizar seus planos de treino e acompanhar o progresso.
 
 Em resumo, o FitGymPro é um software abrangente para academias que simplifica o cadastro de alunos e treinadores, otimiza o gerenciamento de atividades semanais, oferece preenchimento automático de dados via ViaCEP, apresenta um dashboard para controle e visualização de informações e fornece ferramentas eficazes para o acompanhamento do progresso dos alunos. Com esses recursos, ele ajuda a melhorar a eficiência das academias e a proporcionar uma experiência de treino mais personalizada e eficaz para os alunos.
+
+Link do sistema em funcionamento - https://drive.google.com/file/d/10ZR0fFWvMKXf8vG70JWj0osBKVRimRNK/view?usp=sharing
