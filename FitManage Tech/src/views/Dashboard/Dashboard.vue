@@ -73,6 +73,10 @@ export default {
     mounted() {
         this.loadDashboard()
         this.userName = localStorage.getItem('user_name');
+
+        if (!this.userName) {
+            this.$router.push('/');
+            }
     },
     methods: {
         loadDashboard() {
