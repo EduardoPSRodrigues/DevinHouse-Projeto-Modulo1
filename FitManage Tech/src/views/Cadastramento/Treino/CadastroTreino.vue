@@ -1,22 +1,22 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 
 <template>
-    <v-form @submit.prevent="handleCreateNewStudent" class="my-5 form-login">
+    <v-form @submit.prevent="handleCreateWorkouts" class="form-CreateWorkouts my-5">
 
-
-        <h2 class="my-3">Tela de Cadastro TREINO</h2>
+        <div class="d-flex my-3">
+            <h2 class="mt-2 mr-2">Cadastro de Treino</h2>
+            <v-icon color="info" size="42" icon="mdi-dumbbell"></v-icon>
+        </div>
 
         <div class="form-element">
             <v-select 
                 v-model="selectedExerciseId" 
                 :items="responseExercises" 
-                item-title="description"
+                item-title="description" 
                 item-value="id"
-                label="Qual o exercício"
-                >
-        </v-select>      
-
-        <span class="message-error">{{ this.errors.selectedExerciseId }}</span>
+                label="Selecione o exercício">
+            </v-select>
+            <span class="message-error mt-n4">{{ this.errors.selectedExerciseId }}</span>
         </div>
 
         <div class="form-element">
@@ -46,24 +46,28 @@
         </div>
 
         <div class="form-element">
-            <v-textarea
-                clearable
-                label="Observações para esse treino."
-                variant="solo-filled"
-                v-model="observation"
-                >
+            <v-textarea 
+                clearable label="Observações para esse treino." 
+                variant="solo-filled" 
+                v-model="observation">
             </v-textarea>
         </div>
 
-        <v-btn type="submit" class="text-none text-subtitle-1" variant="outlined">
-            Cadastrar
+        <v-btn 
+            type="submit" 
+            class="buttonCreateWorkouts text-none text-subtitle-1" 
+            variant="outlined">
+                Cadastrar
         </v-btn>
 
-        <router-link :to="{ name: 'GerenciamentoAlunos' }">
-            <v-btn class="text-none text-subtitle-1" variant="outlined">
+        <v-btn 
+            type="submit" 
+            color="red" 
+            class="buttonReturn text-none text-subtitle-1" 
+            variant="tonal"
+            :to="{ name: 'GerenciamentoAlunos' }">
                 Voltar
-            </v-btn>
-        </router-link>
+        </v-btn>
 
     </v-form>
 
@@ -77,11 +81,22 @@
         </template>
     </v-snackbar>
 
-    <v-snackbar v-model="snackbarError" :timeout="timeout">
-        Não foi possível criar o treino nesse momento. Por favor, tente mais tarde.
+    <v-snackbar v-model="snackbarError" :timeout="timeoutError">
+        <p>Não foi possível criar o treino nesse momento.</p>
+        <p>Por favor, tente mais tarde.</p>
 
         <template v-slot:actions>
             <v-btn color="red" variant="text" @click="snackbarError = false">
+                Fechar
+            </v-btn>
+        </template>
+    </v-snackbar>
+
+    <v-snackbar v-model="snackbarErrorServer" :timeout="timeout">
+        {{ errorServer }}
+
+        <template v-slot:actions>
+            <v-btn color="red" variant="text" @click="snackbarErrorServer = false">
                 Fechar
             </v-btn>
         </template>
@@ -101,13 +116,12 @@ export default {
             student_id: '',
 
             responseExercises: [],
-            
 
             repetitions: null,
             weight: null,
             break_time: '',
             observation: '',
-            
+
             selectDay: null,
             dayOfWeek: [
                 'Domingo',
@@ -119,10 +133,13 @@ export default {
                 'Sábado',],
 
             errors: {},
+            errorServer: '',
 
             snackbarSuccess: false,
             snackbarError: false,
+            snackbarErrorServer: false,
             timeout: 2000,
+            timeoutError: 3000,
         }
     },
 
@@ -130,6 +147,11 @@ export default {
         this.loadExercises()
         this.loadDayWeek()
         this.student_id = localStorage.getItem('student_id');
+        this.userName = localStorage.getItem('user_name');
+
+        if (!this.userName) {
+            this.$router.push('/');
+            }
     },
     methods: {
         loadExercises() {
@@ -145,17 +167,17 @@ export default {
                 .then((response) => {
                     this.responseExercises = response.data
 
-        })
+                })
                 .catch(() => {
                     alert('Houve uma falha ao carregar as informações.')
                 })
         },
-        loadDayWeek(){
+        loadDayWeek() {
             const hoje = new Date().getDay(); // Obtém o dia da semana atual (0 = Domingo, 1 = Segunda, etc.)
             this.selectDay = this.dayOfWeek[hoje];
         },
 
-        handleCreateNewStudent() {
+        handleCreateWorkouts() {
 
             try {
 
@@ -196,7 +218,8 @@ export default {
                     .catch((error) => {
                         console.log(error)
                         if (error.response?.data?.error) {
-                            alert(error.response.data.error)
+                            this.errorServer = error.response.data.error
+                            this.snackbarErrorServer = true
                         } else {
                             this.snackbarError = true
                         }
@@ -212,13 +235,7 @@ export default {
 </script>
   
 <style scoped>
-.message-error {
-    color: red;
-    margin: 4px;
-    font-size: small;
-}
-
-.form-login {
+.form-CreateWorkouts {
     margin: 0 auto;
     width: 40%;
 
@@ -233,15 +250,15 @@ export default {
     padding: 12px;
 }
 
-.form-select {
-    height: 40px;
-    background-color: #fafafa;
+.form-element {
+    display: flex;
+    flex-direction: column;
+
+    width: 80%;
+}
+
+.form-element input {
     width: 100%;
-
-    border-radius: 8px;
-    border: 1px solid #f2f2f2;
-
-    outline: none;
 }
 
 input {
@@ -255,18 +272,13 @@ input {
     outline: none;
 }
 
-.form-element {
-    display: flex;
-    flex-direction: column;
-
-    width: 80%;
+.message-error {
+    color: red;
+    margin: 4px;
+    font-size: small;
 }
 
-.form-element input {
-    width: 100%;
-}
-
-button {
+.buttonCreateWorkouts {
     background-color: #4bb4f8;
     color: white;
 
@@ -279,13 +291,17 @@ button {
     border: none;
 }
 
-button:hover {
+.buttonCreateWorkouts:hover {
     background-color: #2985c2;
 }
 
-a,
-p {
-    color: #707b88;
-    font-size: 14px;
+.buttonReturn {
+    font-size: 16px;
+
+    height: 40px;
+    width: 80%;
+
+    border-radius: 8px;
+    border: none;
 }
 </style>

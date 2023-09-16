@@ -71,6 +71,11 @@ export default {
   },
   mounted() {
     this.loadViewExercise()
+    this.userName = localStorage.getItem('user_name');
+
+    if (!this.userName) {
+        this.$router.push('/');
+        }
   },
   created() {
     const today = new Date().getDay();

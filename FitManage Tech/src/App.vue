@@ -1,12 +1,12 @@
 <template>
     <v-layout>
-        <v-app-bar color="blue" v-if="renderizarMenu">
+        <v-app-bar color="blue" v-if="viewAppNavigation">
             <v-app-bar-title>
                 <b>Lab Treinos</b>
             </v-app-bar-title>
 
             <v-btn variant="outlined" :to="{ name: 'Dashboard' }">Dashboard</v-btn>
-            <v-btn class="mx-1" variant="outlined" :to="{ name: 'GerenciamentoExercicio' }">Exercicio</v-btn>
+            <v-btn class="mx-1" variant="outlined" :to="{ name: 'GerenciamentoExercicio' }">Exercícios</v-btn>
             <v-btn variant="outlined" :to="{ name: 'GerenciamentoAlunos' }">Alunos</v-btn>
             <v-btn class="mx-1" variant="outlined" :to="{ name: 'Login' }">Sair</v-btn>
         </v-app-bar>
@@ -20,7 +20,7 @@
 <script>
 export default {
     computed: {
-        renderizarMenu() {
+        viewAppNavigation() {
             return this.$route.path !== '/' && this.$route.path !== '/cadastro/usuario'
         }
     }

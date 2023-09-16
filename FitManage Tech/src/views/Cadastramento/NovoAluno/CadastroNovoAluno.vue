@@ -1,10 +1,12 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 
 <template>
-    <v-form @submit.prevent="handleCreateNewStudent" class="my-5 form-login">
+    <v-form @submit.prevent="handleCreateNewStudent" class="my-5 form-createNewStudent">
 
-
-        <h2 class="my-3">Tela de Cadastro de Novo Aluno</h2>
+        <div class="d-flex my-3">
+            <h2 class="mt-2 mr-2">Cadastro de Aluno</h2>
+            <v-icon color="info" size="42" icon="mdi-account-plus-outline"></v-icon>
+        </div>
 
         <div class="form-element">
             <label for="name">Nome Completo:</label>
@@ -72,33 +74,49 @@
             <span class="message-error">{{ this.errors.complement }}</span>
         </div>
 
-        <v-btn type="submit" class="text-none text-subtitle-1" variant="outlined">
-            Cadastrar
+        <v-btn 
+            type="submit" 
+            class="buttonCreateNewStudent text-none text-subtitle-1" 
+            variant="outlined">
+                Cadastrar
         </v-btn>
 
-        <router-link :to="{ name: 'GerenciamentoAlunos' }">
-            <v-btn class="text-none text-subtitle-1" variant="outlined">
+        <v-btn 
+            type="submit" 
+            color="red" 
+            class="buttonReturn text-none text-subtitle-1" 
+            variant="tonal"
+            :to="{ name: 'GerenciamentoAlunos' }">
                 Voltar
-            </v-btn>
-        </router-link>
+        </v-btn>
 
     </v-form>
 
-    <v-snackbar v-model="snackbarSuccess" :timeout="timeout">
+    <v-snackbar v-model="snackbarSuccessCreateNewStudent" :timeout="timeout">
         Aluno cadastrado com sucesso!
 
         <template v-slot:actions>
-            <v-btn color="red" variant="text" @click="snackbarSuccess = false">
+            <v-btn color="red" variant="text" @click="snackbarSuccessCreateNewStudent = false">
                 Fechar
             </v-btn>
         </template>
     </v-snackbar>
 
-    <v-snackbar v-model="snackbarError" :timeout="timeout">
+    <v-snackbar v-model="snackbarErrorCreateNewStudent" :timeout="timeout">
         Não foi possível criar a conta nesse momento.
 
         <template v-slot:actions>
-            <v-btn color="red" variant="text" @click="snackbarError = false">
+            <v-btn color="red" variant="text" @click="snackbarErrorCreateNewStudent = false">
+                Fechar
+            </v-btn>
+        </template>
+    </v-snackbar>
+
+    <v-snackbar v-model="snackbarErrorServer" :timeout="timeout">
+        {{ errorServer }}
+
+        <template v-slot:actions>
+            <v-btn color="red" variant="text" @click="snackbarErrorServer = false">
                 Fechar
             </v-btn>
         </template>
@@ -126,11 +144,20 @@ export default {
             complement: '',
 
             errors: {},
+            errorServer: '',
 
-            snackbarSuccess: false,
-            snackbarError: false,
-            timeout: 2000,
+            snackbarSuccessCreateNewStudent: false,
+            snackbarErrorCreateNewStudent: false,
+            snackbarErrorServer: false,
+            timeout: 2500,
         }
+    },
+    mounted() {
+        this.userName = localStorage.getItem('user_name');
+
+        if (!this.userName) {
+            this.$router.push('/');
+            }
     },
     watch: {
         cep: function () {
@@ -207,11 +234,11 @@ export default {
                     }
                 })
                     .then(() => {
-                        this.snackbarSuccess = true
+                        this.snackbarSuccessCreateNewStudent = true
                         this.name = ''
                         this.email = ''
                         this.contact = ''
-                        this.date_birth = 0,
+                        this.date_birth = 0
                         this.cep = ''
                         this.street = ''
                         this.number = ''
@@ -224,9 +251,10 @@ export default {
                     .catch((error) => {
                         console.log(error)
                         if (error.response?.data?.error) {
-                            alert(error.response.data.error)
+                            this.errorServer = error.response.data.error
+                            this.snackbarErrorServer = true
                         } else {
-                            this.snackbarError = true
+                            this.snackbarErrorCreateNewStudent = true
                         }
                     })
             } catch (error) {
@@ -240,13 +268,7 @@ export default {
 </script>
   
 <style scoped>
-.message-error {
-    color: red;
-    margin: 4px;
-    font-size: small;
-}
-
-.form-login {
+.form-createNewStudent {
     margin: 0 auto;
     width: 40%;
 
@@ -261,15 +283,15 @@ export default {
     padding: 12px;
 }
 
-.form-select {
-    height: 40px;
-    background-color: #fafafa;
+.form-element {
+    display: flex;
+    flex-direction: column;
+
+    width: 80%;
+}
+
+.form-element input {
     width: 100%;
-
-    border-radius: 8px;
-    border: 1px solid #f2f2f2;
-
-    outline: none;
 }
 
 input {
@@ -282,19 +304,13 @@ input {
 
     outline: none;
 }
-
-.form-element {
-    display: flex;
-    flex-direction: column;
-
-    width: 80%;
+.message-error {
+    color: red;
+    margin: 4px;
+    font-size: small;
 }
 
-.form-element input {
-    width: 100%;
-}
-
-button {
+.buttonCreateNewStudent {
     background-color: #4bb4f8;
     color: white;
 
@@ -307,13 +323,17 @@ button {
     border: none;
 }
 
-button:hover {
+.buttonCreateNewStudent:hover {
     background-color: #2985c2;
 }
 
-a,
-p {
-    color: #707b88;
-    font-size: 14px;
+.buttonReturn {
+    font-size: 16px;
+
+    height: 40px;
+    width: 80%;
+
+    border-radius: 8px;
+    border: none;
 }
 </style>
