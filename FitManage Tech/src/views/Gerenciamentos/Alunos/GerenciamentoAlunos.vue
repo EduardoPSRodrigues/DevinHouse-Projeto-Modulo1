@@ -93,7 +93,12 @@ export default {
   },
   mounted() {
     this.loadStudents()
-  },
+    this.userName = localStorage.getItem('user_name');
+
+        if (!this.userName) {
+            this.$router.push('/');
+            }
+    },
   computed: {
     filteredStudents() {
       // Filtrar os alunos com base no valor de studentSearch
